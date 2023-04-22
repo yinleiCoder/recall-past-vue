@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import TheIcon from "./icons/TheIcon.vue";
-import { mdiMagnify, mdiHome, mdiCloudUploadOutline } from "@mdi/js";
+import { mdiMagnify, mdiBulletinBoard, mdiCloudUploadOutline } from "@mdi/js";
 import Avatar from "./Avatar.vue";
 </script>
 
@@ -16,7 +16,7 @@ import Avatar from "./Avatar.vue";
     </div>
     <div class="navItems">
       <RouterLink to="/">
-        <TheIcon :path="mdiHome" />
+        <TheIcon :path="mdiBulletinBoard" />
       </RouterLink>
       <button>
         <TheIcon :path="mdiCloudUploadOutline" />

@@ -26,12 +26,12 @@ import PostActions from "../components/PostActions.vue";
 }
 
 .postInfo {
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .postItem > img {
   width: 100%;
-  height: 400px;
+  aspect-ratio: 16/9;
   object-fit: cover;
   background: red;
   cursor: pointer;

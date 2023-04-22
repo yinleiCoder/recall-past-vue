@@ -1,5 +1,24 @@
 @import './base.css';
 
+* {
+    scrollbar-width: thin;
+    scrollbar-color: transparent black;
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: black;
+    border-radius: 8px;
+    border: 1px solid white;
+}
+
 @media (min-width: 1024px) {
  
 }

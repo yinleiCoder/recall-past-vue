@@ -1,0 +1,17 @@
+const jwt = require("jsonwebtoken");
+const assert = require("http-assert");
+const User = require("../models/User");
+
+module.exports = (options) => {
+  return async (req, res, next) => {
+    const token = String(req.headers.authorization || "")
+      .split(" ")
+      .pop();
+    assert(token, 401, "请登录");
+    const { id } = jwt.verify(token, req.app.get("secret"));
+    assert(id, 401, "请登录");
+    req.user = await User.findById(id);
+    assert(req.user, 401, "请登录");
+    await next();
+  };
+};
