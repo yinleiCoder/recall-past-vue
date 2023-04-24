@@ -10,6 +10,10 @@ defineProps({
     type: Number,
     default: 32,
   },
+  borderWidth: {
+    type: Number,
+    default: 2,
+  },
 });
 </script>
 
@@ -25,5 +29,7 @@ defineProps({
   background: #eee;
   object-fit: cover;
   object-position: top center;
+  border: v-bind(borderWidth + "px") solid black;
+  cursor: pointer;
 }
 </style>

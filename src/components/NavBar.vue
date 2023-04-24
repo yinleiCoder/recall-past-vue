@@ -1,8 +1,32 @@
 <script setup>
-import { RouterLink } from "vue-router";
+import { computed, ref } from "vue";
+import { RouterLink, useRouter } from "vue-router";
 import TheIcon from "./icons/TheIcon.vue";
 import { mdiMagnify, mdiBulletinBoard, mdiCloudUploadOutline } from "@mdi/js";
 import Avatar from "./Avatar.vue";
+import { useUserStore } from "../stores/user";
+import { usePostStore } from "../stores/post";
+
+const showDropdown = ref(false);
+const userStore = useUserStore();
+const postStore = usePostStore();
+const router = useRouter();
+const userAvatar = computed(() => userStore.user.avatar_url);
+
+async function logout() {
+  await userStore.logoutUser();
+  router.replace("/login");
+}
+
+async function searchPosts(e) {
+  await postStore.loadAllPosts(12, 1, e.target.value);
+  router.push({
+    name: "search_result",
+    params: {
+      term: e.target.value,
+    },
+  });
+}
 </script>
 
 <template>
@@ -11,24 +35,33 @@ import Avatar from "./Avatar.vue";
       <span class="logo">RecallPast</span>
     </RouterLink>
     <div class="searchInput">
-      <input type="text" />
+      <input type="text" @change="searchPosts" />
       <TheIcon :path="mdiMagnify" />
     </div>
     <div class="navItems">
-      <RouterLink to="/">
+      <RouterLink to="/news">
         <TheIcon :path="mdiBulletinBoard" />
       </RouterLink>
-      <button>
+      <RouterLink to="/publish">
         <TheIcon :path="mdiCloudUploadOutline" />
-      </button>
+      </RouterLink>
       <div class="profileDropDown">
-        <Avatar :width="36" :height="36" style="cursor: pointer" />
-        <!-- <div class="dropdownMenu">
-                    <ul class="profileMenu">
-                        <li><RouterLink to="/profile">个人主页</RouterLink></li>
-                        <li>退出登录</li>
-                    </ul>
-                </div> -->
+        <Avatar
+          :width="36"
+          :height="36"
+          :src="userAvatar"
+          @click="showDropdown = !showDropdown"
+        />
+        <div
+          class="dropdownMenu"
+          v-show="showDropdown"
+          @click="showDropdown = false"
+        >
+          <ul class="profileMenu">
+            <li><RouterLink to="/profile">个人主页</RouterLink></li>
+            <li @click="logout">退出登录</li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>

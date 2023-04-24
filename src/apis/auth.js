@@ -5,3 +5,16 @@ export function getJwtToken() {
 export function setJwtToken(jwt) {
   localStorage.setItem("jwtToken", jwt);
 }
+
+export function saveUser(user) {
+  localStorage.setItem("user", JSON.stringify(user));
+}
+
+export function getUser() {
+  return JSON.parse(localStorage.getItem("user"));
+}
+
+export function logout() {
+  localStorage.removeItem("jwtToken");
+  localStorage.removeItem("user");
+}

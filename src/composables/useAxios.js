@@ -1,16 +1,18 @@
 import axios from "axios";
+import { getJwtToken } from "../apis/auth";
+import { ElMessage } from "element-plus";
 
 function useAxios() {
   const instance = axios.create({
-    timeout: 1000,
+    baseURL: "http://127.0.0.1:3000",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${getJwtToken()}`,
     },
   });
 
   instance.interceptors.request.use(
     (config) => {
-      console.log(config);
       return config;
     },
     (error) => {
@@ -20,14 +22,13 @@ function useAxios() {
 
   instance.interceptors.response.use(
     (response) => {
-      console.log(response);
-      return response;
+      return response.data;
     },
     (error) => {
+      ElMessage.error(error.response.data.message);
       return Promise.reject(error);
     }
   );
-
   return instance;
 }
 

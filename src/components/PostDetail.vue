@@ -2,17 +2,18 @@
 import Avatar from "./Avatar.vue";
 import Modal from "./Modal.vue";
 import PostActions from "./PostActions.vue";
+import Button from "./Button.vue";
 </script>
 <template>
-  <Modal>
+  <Modal @close="changeShowPostDetail">
     <div class="postDetails">
-      <img src="" alt="" class="postImage" />
+      <img src="https://img.zcool.cn/community/01fnh8igunt1jyoplndl8v3636.jpg?x-oss-process=image/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100/format,webp/quality,q_100" alt="" class="postImage" />
       <div class="postMeta">
         <div class="author">
           <Avatar />
           <span>尹磊</span>
         </div>
-        <pre class="postDesc">这是我家的全家福</pre>
+        <p class="postDesc">这是我家的全家福</p>
         <div class="comments">
           <div class="comment" v-for="n in 10">
             <Avatar class="commentAvatar" />
@@ -27,11 +28,10 @@ import PostActions from "./PostActions.vue";
           <input
             type="text"
             name="comment"
-            id=""
             class="commentInput"
             placeholder="写一条评论吧"
           />
-          <button class="commentPubBtn">发布</button>
+          <Button class="commentPubBtn">发布</Button>
         </div>
       </div>
     </div>
@@ -122,12 +122,12 @@ import PostActions from "./PostActions.vue";
   border-top: 1px solid #eaeaea;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 0.5fr 1fr;
+  grid-template-rows: 1fr 1fr;
   grid-template-areas:
     "actions actions date"
     "comment  comment publish";
   padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   align-items: center;
 }
 
@@ -144,7 +144,7 @@ import PostActions from "./PostActions.vue";
 .commentInput {
   grid-area: comment;
   border-radius: 4px;
-  padding: .25rem .5rem;
+  padding: 0.25rem 0.5rem;
   outline: none;
 }
 
@@ -153,5 +153,6 @@ import PostActions from "./PostActions.vue";
   font-weight: bold;
   border: none;
   background: none;
+  cursor: pointer;
 }
 </style>

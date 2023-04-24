@@ -1,16 +1,22 @@
 <script setup>
-import Avatar from "../components/Avatar.vue";
 import PostDetail from "../components/PostDetail.vue";
-import PostActions from "../components/PostActions.vue";
 import PostList from "../components/PostList.vue";
 import PostItem from "../components/PostItem.vue";
+import { usePostStore } from "../stores/post";
+import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
+
+const postStore = usePostStore();
+const searchResult = computed(() => postStore.searchResultList);
+const route = useRoute();
+const term = computed(() => route.params.term);
 </script>
 
 <template>
   <div>
-    <h2 class="title">搜索结果：尹才兴</h2>
+    <h2 class="title">搜索结果：{{ term }}</h2>
     <PostList>
-      <PostItem v-for="n in 10" />
+      <PostItem v-for="post in searchResult" :post="post"/>
       <!-- <PostDetail /> -->
     </PostList>
   </div>

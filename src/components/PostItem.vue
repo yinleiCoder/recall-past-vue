@@ -1,25 +1,44 @@
 <script setup>
+import { ref } from "vue";
 import Avatar from "../components/Avatar.vue";
 import PostActions from "../components/PostActions.vue";
+import { dateToRelative } from "../utils/date";
+import { usePostStore } from "../stores/post";
+
+const postProp = defineProps({
+  post: {
+    type: Object,
+    default: {},
+  },
+});
+
+const timeRelative = ref(dateToRelative(postProp.post?.createdAt));
+
+const postStore = usePostStore();
+const likeBool = ref(postStore.likedPostsIds.includes(postProp.post._id))
 </script>
 
 <template>
   <div class="postItem">
-    <img src="" alt="" />
+    <img :src="post.imgs[0]" alt="" />
     <div class="postInfo">
       <div class="postMeta">
-        <Avatar class="avatar" />
-        <span class="username">尹磊</span>
-        <span class="postPubDate">12小时之前发布</span>
-        <PostActions />
+        <Avatar class="avatar" :src="post?.owner?.avatar_url" />
+        <span class="username">{{ post?.owner?.name }}</span>
+        <span class="postPubDate">{{ timeRelative }}</span>
+        <PostActions
+          :likes="post.voteCount"
+          :comments="post.comments"
+          :likedByMe="likeBool"
+          @likeClick="likeBool=!likeBool;postStore.toggleLike(post._id, likeBool)"
+        />
       </div>
-      <div class="postDesc">这是我们的全家福</div>
+      <div class="postDesc">{{ post.description }}</div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .postItem {
   box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
@@ -33,7 +52,6 @@ import PostActions from "../components/PostActions.vue";
   width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
-  background: red;
   cursor: pointer;
 }
 
@@ -49,6 +67,7 @@ import PostActions from "../components/PostActions.vue";
 
 .postMeta .avatar {
   grid-area: avatar;
+  cursor: pointer;
 }
 
 .postMeta .username {

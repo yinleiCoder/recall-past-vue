@@ -1,6 +1,4 @@
 <script setup>
-import { useUserStore } from "@/stores/user";
-const store = useUserStore();
 </script>
 <template>
   <div class="footerBox isFixed">
@@ -18,7 +16,7 @@ const store = useUserStore();
         <span>关于我们</span>
       </div>
       <div class="developer">
-        <span>联系开发者{{ store.user.username }}</span>
+        <span>联系开发者</span>
       </div>
       <div class="source">
         <span>源码开放</span>

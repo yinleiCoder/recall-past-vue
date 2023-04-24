@@ -1,13 +1,17 @@
 <script setup>
 import TheIcon from "./icons/TheIcon.vue";
 import { mdiClose } from "@mdi/js";
+
+defineEmits(["close"]);
 </script>
 <template>
   <Teleport to="body">
     <div class="modal">
       <div class="backdrop"></div>
       <div class="modalContent">
-        <button class="closeBtn"><TheIcon :path="mdiClose" /></button>
+        <button class="closeBtn" @click="$emit('close')">
+          <TheIcon :path="mdiClose" />
+        </button>
         <slot></slot>
       </div>
     </div>

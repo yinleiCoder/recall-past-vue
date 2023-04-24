@@ -11,7 +11,11 @@ module.exports = (app) => {
   const Comment = require("../models/Comment");
 
   router.get("/", async (req, res) => {
+    const queryOptions = {};
     const { per_page = 10 } = req.query;
+    if (req.Model.modelName === "Post") {
+      queryOptions.populate = "owner";
+    }
     const page = Math.max(req.query.page * 1, 1) - 1;
     const perPage = Math.max(per_page * 1, 1);
     const fuzzyMatch = new RegExp(req.query.q);
@@ -22,6 +26,7 @@ module.exports = (app) => {
         { description: fuzzyMatch },
       ],
     })
+      .setOptions(queryOptions)
       .limit(perPage)
       .skip(page * perPage);
     res.send(items);
@@ -44,7 +49,10 @@ module.exports = (app) => {
   });
 
   router.put("/:id", async (req, res) => {
-    const model = await req.Model.findByIdAndUpdate(req.params.id);
+    console.log(req.body);
+    const model = await req.Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     res.send(model);
   });
 
@@ -59,7 +67,12 @@ module.exports = (app) => {
 
   const resourceMiddleware = require("../middleware/resource");
 
-  app.use("/api/rest/:resource", authMiddleware(), resourceMiddleware(), router);
+  app.use(
+    "/api/rest/:resource",
+    authMiddleware(),
+    resourceMiddleware(),
+    router
+  );
 
   const multer = require("multer");
   const upload = multer({ dest: __dirname + "/../uploads" });
@@ -87,13 +100,14 @@ module.exports = (app) => {
       },
       app.get("secret")
     );
-    res.send({ token });
+    const item = await User.findById(user._id);
+    res.send({ token, user: item });
   });
 
   app.post("/api/signup", async (req, res) => {
     const model = await User.create(req.body);
     res.send(model);
-  })
+  });
 
   // 某个用户的关注列表
   app.get("/api/:id/following", async (req, res) => {
@@ -146,6 +160,14 @@ module.exports = (app) => {
     res.send(user.likingPosts);
   });
 
+  // 某个用户喜欢的帖子列表
+  app.get("/api/:id/publishedPosts", async (req, res) => {
+    const user = await Post.find({
+      owner: req.params.id,
+    });
+    res.send(user);
+  });
+
   // 当前登录的用户赞帖子
   app.put("/api/likingPosts/:id", authMiddleware(), async (req, res) => {
     const me = await User.findById(req.user._id).select("+likingPosts");
@@ -193,7 +215,7 @@ module.exports = (app) => {
     const { rootCommentId } = req.query;
     const comment = await Comment.find({
       postId,
-      rootCommentId
+      rootCommentId,
     }).populate("commentator replyTo");
     res.send(comment);
   });

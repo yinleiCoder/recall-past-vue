@@ -1,6 +1,6 @@
 import { getJwtToken } from "../apis/auth";
-import useAxios from "../composables/useAxios";
 
+//  discard!!!
 export async function request(
   url,
   { method = "GET", body, headers, auth = true } = {}
@@ -9,7 +9,7 @@ export async function request(
     method,
     headers: {
       "Content-Type": "application/json",
-      ...arguments(auth && { Authorization: `Bearer ${getJwtToken()}` }),
+      ...(auth && { Authorization: `Bearer ${getJwtToken()}` }),
       ...headers,
     },
     ...(body && { body: JSON.stringify(body) }),

@@ -1,6 +1,5 @@
 <!-- This icon is from <https://github.com/Templarian/MaterialDesign>, distributed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0) license-->
 <script setup>
-import { ref } from "vue";
 import SvgIcon from "@jamescoyle/vue-icon";
 
 const props = defineProps({
@@ -12,17 +11,14 @@ const props = defineProps({
     type: String,
   },
 });
-
-const icon = ref(props.path);
-const iconColor = ref(props.color || "#000");
 </script>
 
 <template>
-  <svg-icon type="mdi" :path="icon" class="svg"></svg-icon>
+  <svg-icon type="mdi" :path="path" class="svg"></svg-icon>
 </template>
 
 <style scoped>
 .svg {
-  color: v-bind(iconColor);
+  color: v-bind(color);
 }
 </style>
